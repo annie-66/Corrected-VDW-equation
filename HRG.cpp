@@ -122,7 +122,7 @@ data >> element1 >> element2 >> element3 >> element4 >> element5 >> element6 >> 
 
 data.close();
 
-string myfile = "Evaluation.dat";
+string myfile = "press.dat";
 ofstream funcfile(myfile);
     
 if(!funcfile.is_open()){
@@ -133,38 +133,39 @@ if(!funcfile.is_open()){
 
 
 
+// // CHECK
+// 	m = mass.at(10);
+// 	d = degeneracy.at(10);
+// 	B = baryonnumber.at(10);
+// 	S = strangeness.at(10);
+// 	Q = charge.at(10);
+// 	muB = 100;
+// 	T=150;
 
-m = mass.at(10);
-	d = degeneracy.at(10);
-	B = baryonnumber.at(10);
-	S = strangeness.at(10);
-	Q = charge.at(10);
-	muB = 100;
-	T=150;
+// 	cout << "Mass: " << m << endl;
+// 	cout << "B: " << B << endl;
+// 	cout << "d: " << d << endl;
 
-	cout << "mass " << m << endl;
-	cout << "B " << B << endl;
+	// for(int h= 0; h<2000;h++){
 
-	for(int h= 0; h<2000;h++){
-
-		double yy = (entropydensity2(h))/pow(T,3);
-		funcfile << h << " " << yy << endl;
-		}
-
-
-
+	// 	double yy = (entropydensity2(h))/pow(T,3);
+	// 	funcfile << h << " " << yy << endl;
+	// 	}
 
 
-for(int l=0; l<301; l++){
+
+
+
+for(int l=0; l<601; l++){
 	muB = l;
-	cout << "------------------ muB = " << muB << " ------------------" << endl; 	/// DENSITY LOOP
-for(int j=1; j<31; j++){
+	cout << "muB = " << muB << "\r" << endl; 	/// DENSITY LOOP
+for(int j=1; j<821; j++){
 
 	double sum = 0;
-	T = j*10;
+	T = j;
 
-	cout << "Calculating HRG pressure for T = " << T << endl;			/// TEMPERATURE LOOP
-	cout << endl;
+	// cout << "Calculating HRG pressure for T = " << T << endl;			/// TEMPERATURE LOOP
+	
 
 for(int k=0; k< mass.size() ;k++){										///PARTICLE LOOP
 
@@ -174,7 +175,7 @@ for(int k=0; k< mass.size() ;k++){										///PARTICLE LOOP
 	S = strangeness.at(k);
 	Q = charge.at(k);
 
-	for(int h= 10; h<10000;h++){
+	for(int h= 10; h<100;h++){
 
 		endpt = h;
 		f0 = press(h);
