@@ -17,23 +17,9 @@ double epsilon = pow(10,-8);
 
 using namespace std;
 
-vector <int> id;
-vector <string> name;
-vector <double> mass;
-vector <int> width;
-vector <int> degeneracy;
-vector <int> baryonnumber;
-vector <int> strangeness;
-vector <int> charmness;
-vector <int> bottomness;
-vector <int> isospin;
-vector <int> charge;
-vector <int> decay;
 vector<double> PressureHRG, BaryonDensityHRG, EntropyDensityHRG;
 double muB,m,B,d,Q,S,T,f0,f1,endpt,sumint,integral;
-double element3, element4, element5, element6, element7, element8, element9, element10, element11, element12;	
-std::string element1, element2;
-int muB_grid_size_MeV, T_grid_size_MeV;
+int muB_grid_min_MeV, muB_grid_max_MeV, T_grid_min_MeV, T_grid_max_MeV;
 
 // Gaussian Quadrature method for taking integrals -- from Numerical Recipes in C++
 DP NR::qgaus(DP func(const DP), const DP a, const DP b)
@@ -55,21 +41,46 @@ DP NR::qgaus(DP func(const DP), const DP a, const DP b)
 	return s *= xr;
 }
 
+// Particle list variables class
+class Plist {
+public:
 
-void get_particlelist(data){
+    static double element3, element4, element5, element6, element7, element8, element9, element10, element11, element12;	
+    static std::string element1, element2;
+	static vector <double> mass;
+ 	static vector <int> degeneracy;
+	static vector <int> baryonnumber;
+	static vector <int> strangeness;
+	static vector <int> charge;
+
+
+};
+
+
+// Function that reads particle list data
+void get_particlelist(string particle_list){
+	ifstream data(particle_list);
+
+	if(!data.is_open()){
+    cerr << "ERROR: could not read particle list" << endl;
+    exit(1);
+	}	
+
 	while (!data.eof()){
 
-	data >> element1 >> element2 >> element3 >> element4 >> element5 >> element6 >> element7 >> element8 >> element9 >> element10 >> element11 >> element12;
+	data >> Plist::element1 >> Plist::element2 >> Plist::element3 >> Plist::element4 >> Plist::element5 >> Plist::element6 >> Plist::element7 >> Plist::element8 >> Plist::element9 >> Plist::element10 >> Plist::element11 >> Plist::element12;
 	//Mass is converted from GeV to MeV
-		double massmev = 1000*element3;
-		mass.push_back(massmev);
+		double massmev = 1000*Plist::element3;
+		Plist::mass.push_back(massmev);
 
-		degeneracy.push_back(element5);
-		baryonnumber.push_back(element6);
-		strangeness.push_back(element7);
-		charge.push_back(element11);
+		Plist::degeneracy.push_back(Plist::element5);
+		Plist::baryonnumber.push_back(Plist::element6);
+		Plist::strangeness.push_back(Plist::element7);
+		Plist::charge.push_back(Plist::element11);
 
-}
+	}
+
+	data.close();
 }
 
 //Pressure in Ideal HRG
@@ -98,3 +109,4 @@ DP baryondensity(const DP x){
 
 	return pow(x,2)/(exp(sqrt(pow(x,2)+pow(m,2))/T - muB*B/T)+ pow(-1,B+1));
 }
+

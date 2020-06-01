@@ -3,6 +3,7 @@
 // 
 //
 //  Created by Debora Mroczek on 8/1/17.
+// 	Updated on 06/01/2020.
 //  Copyright © 2017 Debora Mroczek. All rights reserved.
 //
 
@@ -17,14 +18,24 @@
 #include <cmath>
 #include <vector>
 #include <string>
-#include "nr.h"
 #include <iomanip>
 #include <ctime>
+#include <iostream> 
 #include "func.h"
+#include "nr.h"
 
 
 
 using namespace std;
+
+
+double Plist::element3, Plist::element4, Plist::element5, Plist::element6, Plist::element7, Plist::element8, Plist::element9, Plist::element10, Plist::element11, Plist::element12;	
+std::string Plist::element1, Plist::element2;
+vector <double> Plist::mass;
+vector <int> Plist::baryonnumber;
+vector <int> Plist::degeneracy;
+vector <int> Plist::strangeness;
+vector <int> Plist::charge;
 
 
 
@@ -32,8 +43,11 @@ using namespace std;
 
 int main(){
 
-muB_grid_size_MeV = 600;
-T_grid_size_MeV = 820;
+muB_grid_min_MeV = 0;
+muB_grid_max_MeV = 600;
+
+T_grid_min_MeV = 1;
+T_grid_max_MeV = 820;
 
 //We set up an optional clock to keep track of how long the program takes to run. Uncomment if output is desired.
 // int start_s= clock();
@@ -41,19 +55,20 @@ T_grid_size_MeV = 820;
 
 // Input particle list
 string particle_list = "PDG2016Plus.dat";
-ifstream data(particle_list);
 
-if(!data.is_open()){
-    cerr << "ERROR: could not read particle list" << endl;
-    exit(1);
-}
-
-get_particlelist(data);
-
-data.close();
+//Create substring with particle list name
+// size_t pos = particle_list.find(".dat");
+// string foldername = particle_list.substr(0,pos);
 
 
-string myfile = "press.dat";
+
+get_particlelist(particle_list);
+
+
+//Create output file name 
+
+string myfile = "PRESS_HRG_IDEAL_MUB_" + to_string(muB_grid_min_MeV) + "_" + to_string(muB_grid_max_MeV) + "_T_" + to_string(T_grid_min_MeV) + "_" + to_string(T_grid_max_MeV) + ".dat";
+
 ofstream funcfile(myfile);
     
 if(!funcfile.is_open()){
@@ -64,22 +79,22 @@ if(!funcfile.is_open()){
 
 //The integral loops over 4 variables: Baryon density, temperature, particle, and subdivisions of the integral. 
 
-for(int l=0; l<muB_grid_size_MeV+1; l++){ /// DENSITY LOOP
+for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 	muB = l;
 	
-	for(int j=1; j<T_grid_size_MeV+1; j++){ /// TEMPERATURE LOOP
+	for(int j=T_grid_min_MeV; j<T_grid_max_MeV+1; j++){ /// TEMPERATURE LOOP
 
 		double sum = 0;
 		T = j;		
 	
 
-		for(int k=0; k< mass.size() ;k++){ ///PARTICLE LOOP
+		for(int k=0; k<  Plist::mass.size() ;k++){ ///PARTICLE LOOP
 
-			m = mass.at(k);
-			d = degeneracy.at(k);
-			B = baryonnumber.at(k);
-			S = strangeness.at(k);
-			Q = charge.at(k);
+			m = Plist::mass.at(k);
+			d =  Plist::degeneracy.at(k);
+			B =  Plist::baryonnumber.at(k);
+			S =  Plist::strangeness.at(k);
+			Q =  Plist::charge.at(k);
 
 			//Integral contribution check
 			for(int h= 1; h<100;h++){
