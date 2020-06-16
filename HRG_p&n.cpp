@@ -43,11 +43,11 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 0;
-muB_grid_max_MeV = 600;
+muB_grid_min_MeV = 800;
+muB_grid_max_MeV = 810;
 
-T_grid_min_MeV = 1;
-T_grid_max_MeV = 820;
+T_grid_min_MeV = 17;
+T_grid_max_MeV = 18;
 
 //We set up an optional clock to keep track of how long the program takes to run. Uncomment if output is desired.
 // int start_s= clock();
@@ -67,7 +67,7 @@ get_particlelist(particle_list);
 
 //Create output file name 
 
-string myfile = "PRESS_HRG_IDEAL_MUB_" + to_string(muB_grid_min_MeV) + "_" + to_string(muB_grid_max_MeV) + "_T_" + to_string(T_grid_min_MeV) + "_" + to_string(T_grid_max_MeV) + ".dat";
+string myfile = "PRESS_density_HRG_shifted_MUB_" + to_string(muB_grid_min_MeV) + "_" + to_string(muB_grid_max_MeV) + "_T_" + to_string(T_grid_min_MeV) + "_" + to_string(T_grid_max_MeV) + ".dat";
 
 ofstream funcfile(myfile);
     
@@ -85,6 +85,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 	for(int j=T_grid_min_MeV; j<T_grid_max_MeV+1; j++){ /// TEMPERATURE LOOP
 
 		double sum = 0;
+		double sum_dens = 0;
 		T = j;		
 	
 
@@ -108,31 +109,55 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 				break;
 				}	
 			}
+			
+			// Baryondensity contribution check
+			for(int jj=i; jj<100; jj++){
+				
+				endpt_n = jj;
+				n0 = baryondensity(jj);
+				
+				//check where density contribution stops
+				if(n0<epsilon){
+				endpt_n = jj;
+				break;
+				}
+			}
 
 			/// INTEGRAL LOOP
 
 			//Must reset the sum after each particle.
-			sumint = 0.0;	
+			sumint = 0.0;
+			sumint_dens = 0.0;
 			//Each integral is broken into 10 smaller integrals. 
+			//N2 is density
 			double X2 = 0.0;
+			double N2 = 0.0;
 			for(int p = 0; p<10;p++){
 
 				double X1 = X2;	
-				X2 = X2 + endpt/10.0;									
+				double N1 = N2;
+				X2 = X2 + endpt/10.0;
+				N2 = N2 + endpt_n/10.0;
+				
 
         		double ss;
+			double ns;
         		ss=NR::qgaus(press,X1,X2);
  				sumint = sumint+ss;
+			ns=NR::qgaus(baryondensity,N1,N2);
+				sumint_dens = sumint + ns;
+				
      	
-	
+				dens_integral = (sumint_dens/pow(T,3));
 				integral = (sumint/pow(T,3)); //Integral normalized by the correct power of temperature.
 			}
 	
 			sum = sum + integral; // updates the total sum after each particle.
+			sum_dens = sum_dens + dens_integral;
 		}
 		  
     //Writes the output to the file 
-    funcfile << muB << " " << T << " " << sum << endl;        
+    funcfile << muB << " " << T << " " << sum << sum_dens << " " << endl;        
  	}
 
 }
