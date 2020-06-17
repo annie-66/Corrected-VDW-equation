@@ -145,7 +145,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
         		ss=NR::qgaus(press,X1,X2);
  				sumint = sumint+ss;
 			ns=NR::qgaus(baryondensity,N1,N2);
-				sumint_dens = sumint + ns;
+				sumint_dens = sumint_dens + ns;
 				
      	
 				dens_integral = (sumint_dens/pow(T,3));
@@ -157,7 +157,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 		}
 		  
     //Writes the output to the file 
-    funcfile << muB << " " << T << " " << sum << sum_dens << " " << endl;        
+    funcfile << muB << " " << T << " " << sum << " " << sum_dens << " " << endl;        
  	}
 
 }
