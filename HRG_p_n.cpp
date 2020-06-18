@@ -44,9 +44,9 @@ vector <int> Plist::charge;
 int main(){
 
 muB_grid_min_MeV = 800;
-muB_grid_max_MeV = 810;
+muB_grid_max_MeV = 900;
 
-T_grid_min_MeV = 17;
+T_grid_min_MeV = 15;
 T_grid_max_MeV = 18;
 a = 329;
 b = 3.42;
