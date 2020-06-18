@@ -13,7 +13,7 @@
 #include <ctime>
 
 double pi = 3.1415;
-double epsilon = pow(10,-8);
+double epsilon = pow(10,-15);
 
 using namespace std;
 
