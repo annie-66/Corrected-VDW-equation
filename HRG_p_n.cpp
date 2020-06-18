@@ -113,7 +113,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			}
 			
 			// Baryondensity contribution check
-			for(int jj=i; jj<100; jj++){
+			for(int jj=1; jj<100; jj++){
 				
 				endpt_n = jj;
 				n0 = baryondensity(jj);
