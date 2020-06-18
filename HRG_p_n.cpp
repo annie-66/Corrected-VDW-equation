@@ -156,10 +156,11 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 	
 			sum = sum + integral;// updates the total sum after each particle.
 			sum_dens = sum_dens + dens_integral;
-            sum_dens = sum_dens/(1+b*sum_dens);
-            sum = sum - a * sum_dens * sum_dens;
+            
             
 		}
+        sum_dens = sum_dens/(1+b*sum_dens);
+        sum = sum - a * sum_dens * sum_dens;
 		  
     //Writes the output to the file 
     funcfile << muB << " " << T << " " << sum << " " << sum_dens << " " << endl;        
