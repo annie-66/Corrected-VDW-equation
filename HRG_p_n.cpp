@@ -43,13 +43,13 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 800;
-muB_grid_max_MeV = 900;
+muB_grid_min_MeV = 400;
+muB_grid_max_MeV = 950;
 
-T_grid_min_MeV = 15;
+T_grid_min_MeV = 18;
 T_grid_max_MeV = 18;
-a = 329;
-b = 3.42;
+a = 329/(197.3)^3;
+b = 3.42/(197.3)^3;
 
 //We set up an optional clock to keep track of how long the program takes to run. Uncomment if output is desired.
 // int start_s= clock();
