@@ -43,8 +43,8 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 400;
-muB_grid_max_MeV = 950;
+muB_grid_min_MeV = 600;
+muB_grid_max_MeV = 1000;
 
 T_grid_min_MeV = 18;
 T_grid_max_MeV = 18;
@@ -150,8 +150,8 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 				sumint_dens = sumint_dens + ns;
 				
      	
-				dens_integral = (sumint_dens/pow(T,3));
-				integral = (sumint/pow(T,4)); //Integral normalized by the correct power of temperature.
+				dens_integral = (sumint_dens/pow(T,4));
+				integral = (sumint/pow(T,3)); //Integral normalized by the correct power of temperature.
 			}
 	
 			sum = sum + integral;// updates the total sum after each particle.
@@ -160,9 +160,9 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
             
 		}
         sum_dens = sum_dens * pow(T,3)/ pow(197.3,3);
-        sum_dens = sum_dens / (1 + b * sum_dens);
+      
         sum = sum * pow(T,4) / pow(197.3,3);
-        sum = sum - a * pow(sum_dens,2);
+
 		  
     //Writes the output to the file 
     funcfile << muB << " " << T << " " << sum << " " << sum_dens << " " << endl;        
