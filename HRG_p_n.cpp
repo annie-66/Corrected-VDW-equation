@@ -43,11 +43,11 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 600;
+muB_grid_min_MeV = 500;
 muB_grid_max_MeV = 1000;
 
-T_grid_min_MeV = 18;
-T_grid_max_MeV = 18;
+T_grid_min_MeV = 16;
+T_grid_max_MeV = 16;
 a = 329;
 b = 3.42;
 
@@ -100,7 +100,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			Q =  Plist::charge.at(k);
 
 			//Integral contribution check
-			for(int h= 1; h<100;h++){
+			for(int h= 1; h<100000;h++){
 
 				endpt = h;
 				f0 = press(h);
@@ -113,7 +113,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			}
 			
 			// Baryondensity contribution check
-			for(int jj=1; jj<100; jj++){
+			for(int jj=1; jj<100000; jj++){
 				
 				endpt_n = jj;
 				n0 = baryondensity(jj);
@@ -160,8 +160,9 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
             
 		}
         sum_dens = sum_dens * pow(T,3)/ pow(197.3,3);
-      
+        sum_dens = sum_dens / (1 + b * sum_dens);
         sum = sum * pow(T,4) / pow(197.3,3);
+        sum = sum - pow(sum_dens,2);
 
 		  
     //Writes the output to the file 
