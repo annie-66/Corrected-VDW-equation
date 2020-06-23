@@ -43,11 +43,11 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 500;
-muB_grid_max_MeV = 1000;
+muB_grid_min_MeV = 900;
+muB_grid_max_MeV = 900;
 
-T_grid_min_MeV = 16;
-T_grid_max_MeV = 16;
+T_grid_min_MeV = 17;
+T_grid_max_MeV = 17;
 a = 329;
 b = 3.42;
 
@@ -113,7 +113,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			}
 			
 			// Baryondensity contribution check
-			for(int jj=1; jj<100000; jj++){
+			for(int jj=1; jj<10000000; jj++){
 				
 				endpt_n = jj;
 				n0 = baryondensity(jj);
