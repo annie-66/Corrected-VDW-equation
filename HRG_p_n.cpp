@@ -88,6 +88,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 
 		double sum = 0;
 		double sum_dens = 0;
+        mu = 0;
 		T = j;		
 	
 
@@ -130,6 +131,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			//Must reset the sum after each particle.
 			sumint = 0.0;
 			sumint_dens = 0.0;
+    
 			//Each integral is broken into 10 smaller integrals. 
 			//N2 is density
 			double X2 = 0.0;
@@ -149,24 +151,28 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
                 ns=NR::qgaus(baryondensity,N1,N2);
 				sumint_dens = sumint_dens + ns;
 				
-     	
+                //Integral normalized by the correct power of temperature
 				dens_integral = (sumint_dens/pow(T,4));
-				integral = (sumint/pow(T,3)); //Integral normalized by the correct power of temperature.
+				integral = (sumint/pow(T,3));
 			}
 	
 			sum = sum + integral;// updates the total sum after each particle.
 			sum_dens = sum_dens + dens_integral;
-            
+            mu = mu + muB * B;
             
 		}
         sum_dens = sum_dens * pow(T,3)/ pow(197.3,3);
-        sum_dens = sum_dens / (1 + b * sum_dens);
+        
         sum = sum * pow(T,4) / pow(197.3,3);
-        sum = sum - pow(sum_dens,2);
-
+        
+        mu_new = mu + b*sum - 2*a * sum_dens/(1 + b*sum_dens);
+        
+        sum_dens = sum_dens/(1 + b*sum_dens);
+        
+        sum = sum - a * sum_dens*sum_dens;
 		  
     //Writes the output to the file 
-    funcfile << muB << " " << T << " " << sum << " " << sum_dens << " " << endl;        
+    funcfile << muB << " " << mu << " " << mu_new << " " << T << " " << sum << " " << sum_dens << " " << endl;
  	}
 
 }
