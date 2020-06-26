@@ -88,7 +88,6 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 
 		double sum = 0;
 		double sum_dens = 0;
-        mu = 0;
 		T = j;		
 	
 
@@ -99,7 +98,6 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			B =  Plist::baryonnumber.at(k);
 			S =  Plist::strangeness.at(k);
 			Q =  Plist::charge.at(k);
-
 			//Integral contribution check
 			for(int h= 1; h<100000;h++){
 
@@ -158,21 +156,19 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 	
 			sum = sum + integral;// updates the total sum after each particle.
 			sum_dens = sum_dens + dens_integral;
-            mu = mu + muB * B;
-            
 		}
         sum_dens = sum_dens * pow(T,3)/ pow(197.3,3);
         
         sum = sum * pow(T,4) / pow(197.3,3);
         
-        mu_new = mu + b*sum - 2*a * sum_dens/(1 + b*sum_dens);
+        mu = muB + b*sum - 2*a * sum_dens/(1 + b*sum_dens);
         
         sum_dens = sum_dens/(1 + b*sum_dens);
         
         sum = sum - a * sum_dens*sum_dens;
 		  
     //Writes the output to the file 
-    funcfile << muB << " " << mu << " " << mu_new << " " << T << " " << sum << " " << sum_dens << " " << endl;
+    funcfile << muB << " " << mu << " " << T << " " << sum << " " << sum_dens << " " << endl;
  	}
 
 }
