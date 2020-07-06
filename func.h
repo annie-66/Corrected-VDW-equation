@@ -18,8 +18,9 @@ double epsilon = pow(10,-15);
 using namespace std;
 
 vector<double> PressureHRG, BaryonDensityHRG, EntropyDensityHRG;
-double muB,m,B,d,Q,S,T,f0,f1,n0, a, b, mu,mu_new, endpt,endpt_n,sumint,sumint_dens,integral, dens_integral;
-int muB_grid_min_MeV, muB_grid_max_MeV, T_grid_min_MeV, T_grid_max_MeV;
+double muB,m,B,d,Q,S,T,f0,f1,n0, a, b, mu,mu_new, endpt_nid,endpt_pid,sumint_pid,sumint_nid,particle_integral_pid, particle_integral_nid,particle_sum_nid,particle_sum_pid , pid, nid,p_vdw, n_vdw;
+
+int muB_grid_min_MeV, muB_grid_max_MeV,T_grid_min_MeV, T_grid_max_MeV;
 
 // Gaussian Quadrature method for taking integrals -- from Numerical Recipes in C++
 DP NR::qgaus(DP func(const DP), const DP a, const DP b)

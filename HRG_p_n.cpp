@@ -43,12 +43,12 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 900;
-muB_grid_max_MeV = 900;
+muB_grid_min_MeV = 510;
+muB_grid_max_MeV = 510;
 
 T_grid_min_MeV = 17;
 T_grid_max_MeV = 17;
-a = 329;
+a = 326;
 b = 3.42;
 
 //We set up an optional clock to keep track of how long the program takes to run. Uncomment if output is desired.
@@ -101,25 +101,25 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			//Integral contribution check
 			for(int h= 1; h<100000;h++){
 
-				endpt = h;
+				endpt_pid = h;
 				f0 = press(h);
 
 				// Checks where the integral stops contributing. This is the end point of the function. 
 				if(f0<epsilon){
-				endpt = h;
+				endpt_pid = h;
 				break;
-				}	
+				}
 			}
 			
 			// Baryondensity contribution check
-			for(int jj=1; jj<10000000; jj++){
+			for(int h=1; h<100000; h++){
 				
-				endpt_n = jj;
-				n0 = baryondensity(jj);
+				endpt_nid = h;
+				n0 = baryondensity(h);
 				
 				//check where density contribution stops
 				if(n0<epsilon){
-				endpt_n = jj;
+				endpt_nid = h;
 				break;
 				}
 			}
@@ -127,8 +127,8 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			/// INTEGRAL LOOP
 
 			//Must reset the sum after each particle.
-			sumint = 0.0;
-			sumint_dens = 0.0;
+			sumint_pid = 0.0;
+			sumint_nid = 0.0;
     
 			//Each integral is broken into 10 smaller integrals. 
 			//N2 is density
@@ -138,37 +138,38 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 
 				double X1 = X2;	
 				double N1 = N2;
-				X2 = X2 + endpt/10.0;
-				N2 = N2 + endpt_n/10.0;
+				X2 = X2 + endpt_pid/10.0;
+				N2 = N2 + endpt_nid/10.0;
 				
 
-        		double ss;
-                double ns;
-        		ss=NR::qgaus(press,X1,X2);
- 				sumint = sumint+ss;
-                ns=NR::qgaus(baryondensity,N1,N2);
-				sumint_dens = sumint_dens + ns;
+        		double particle_contribution_pid;
+                double particle_contribution_nid;
+        		particle_contribution_pid=NR::qgaus(press,X1,X2);
+ 				sumint_pid += particle_contribution_pid;
+                
+                particle_contribution_nid=NR::qgaus(baryondensity,N1,N2);
+				sumint_nid += particle_contribution_nid;
 				
                 //Integral normalized by the correct power of temperature
-				dens_integral = (sumint_dens/pow(T,4));
-				integral = (sumint/pow(T,3));
+				particle_integral_pid = sumint_pid;
+				particle_integral_nid = sumint_nid;
 			}
 	
-			sum = sum + integral;// updates the total sum after each particle.
-			sum_dens = sum_dens + dens_integral;
+			particle_sum_pid += particle_integral_pid;// updates the total sum after each particle.
+			particle_sum_nid += particle_integral_nid;
 		}
-        sum_dens = sum_dens * pow(T,3)/ pow(197.3,3);
+    pid = particle_sum_pid*T /pow(197.3,3);
+    nid = particle_sum_nid /(T * pow(197.3,3));
         
-        sum = sum * pow(T,4) / pow(197.3,3);
+    mu = muB + b*pid - 2*a * nid/(1 + b * nid);
         
-        mu = muB + b*sum - 2*a * sum_dens/(1 + b*sum_dens);
+    n_vdw = nid/(1 + b*nid);
         
-        sum_dens = sum_dens/(1 + b*sum_dens);
-        
-        sum = sum - a * sum_dens*sum_dens;
+    p_vdw = pid - a * pow(n_vdw,2);
 		  
     //Writes the output to the file 
-    funcfile << muB << " " << mu << " " << T << " " << sum << " " << sum_dens << " " << endl;
+funcfile  << T <<" "<< muB <<" "<< mu << " " << p_vdw << " " << n_vdw << " " <<pid <<" " << nid<<
+        " "<< endpt_pid << " " << endpt_nid << endl;
  	}
 
 }
