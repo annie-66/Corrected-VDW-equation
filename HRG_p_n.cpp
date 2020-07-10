@@ -43,9 +43,8 @@ vector <int> Plist::charge;
 
 int main(){
 
-muB_grid_min_MeV = 510;
-muB_grid_max_MeV = 510;
-
+muB_grid_min_MeV = 700;
+muB_grid_max_MeV = 710;
 T_grid_min_MeV = 17;
 T_grid_max_MeV = 17;
 a = 326;
@@ -86,8 +85,8 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 	
 	for(int j=T_grid_min_MeV; j<T_grid_max_MeV+1; j++){ /// TEMPERATURE LOOP
 
-		double sum = 0;
-		double sum_dens = 0;
+		double particle_sum_pid = 0; //Resets integrals after every point
+		double particle_sum_nid = 0;
 		T = j;		
 	
 
@@ -112,14 +111,14 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			}
 			
 			// Baryondensity contribution check
-			for(int h=1; h<100000; h++){
+			for(int h1=1; h1<10000000; h1++){
 				
-				endpt_nid = h;
-				n0 = baryondensity(h);
+				endpt_nid = h1;
+				n0 = baryondensity(h1);
 				
 				//check where density contribution stops
 				if(n0<epsilon){
-				endpt_nid = h;
+				endpt_nid = h1;
 				break;
 				}
 			}
@@ -168,8 +167,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
     p_vdw = pid - a * pow(n_vdw,2);
 		  
     //Writes the output to the file 
-funcfile  << T <<" "<< muB <<" "<< mu << " " << p_vdw << " " << n_vdw << " " <<pid <<" " << nid<<
-        " "<< endpt_pid << " " << endpt_nid << endl;
+funcfile  << T <<" "<< muB <<" "<< mu << " " << p_vdw << " " << n_vdw << endl;
  	}
 
 }
