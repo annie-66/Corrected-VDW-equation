@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <ctime>
 
-double pi = 3.1415;
+double pi = 3.14159;
 double epsilon = pow(10,-15);
 
 using namespace std;
@@ -88,7 +88,7 @@ void get_particlelist(string particle_list){
 DP press(const DP x)
 {
 
-    return (d*pow(-1,B+1))/(2*pow(pi,2))*pow(x,2)*log(1+pow(-1,B+1)*exp(-sqrt(pow(x,2)+pow(m,2))/T+muB*B/T));
+    return (d*pow(-1,B+1))/(2*pow(pi,2))*pow(x,2)*log(1+pow(-1,B+1)*exp(-sqrt(pow(x,2)+pow(m,2))/T-muB*B/T));
 }
 
 //Two entropy density integrals in Ideal HRG
@@ -108,5 +108,5 @@ DP entropydensity2(const DP x){
 
 DP baryondensity(const DP x){
 
-	return pow(x,2)/(exp(sqrt(pow(x,2)+pow(m,2))/T - muB*B/T)+ pow(-1,B+1));
+	return d/(2*pi*pi)*pow(x,2)/(exp(sqrt(pow(x,2)+pow(m,2))/T - muB*B/T)+ pow(-1,B+1));
 }

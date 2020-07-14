@@ -158,7 +158,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
 			particle_sum_nid += particle_integral_nid;
 		}
     pid = particle_sum_pid*T /pow(197.3,3);
-    nid = particle_sum_nid /(T * pow(197.3,3));
+    nid = particle_sum_nid /(pow(197.3,3));
         
     mu = muB + b*pid - 2*a * nid/(1 + b * nid);
         
@@ -167,7 +167,7 @@ for(int l= muB_grid_min_MeV; l<muB_grid_max_MeV+1; l++){ /// DENSITY LOOP
     p_vdw = pid - a * pow(n_vdw,2);
 		  
     //Writes the output to the file 
-funcfile  << T <<" "<< muB <<" "<< mu << " " << p_vdw << " " << n_vdw << endl;
+funcfile  << T <<" "<< muB <<" "<< mu << " " << p_vdw << " " << n_vdw <<" "<<pid<<" "<<nid<< endl;
  	}
 
 }
